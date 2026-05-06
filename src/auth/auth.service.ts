@@ -14,6 +14,7 @@ export class AuthService {
 ) {}
   
   async register(email: string, password: string) {
+
     const existingUser = await this.usersService.findByEmail(email);
 
     if (existingUser) {
@@ -28,7 +29,7 @@ export class AuthService {
     });
 
     return {
-      message: 'User registered successfully',
+      message: 'User Registered Successfully...',
       user,
     };
   }
@@ -57,7 +58,8 @@ export class AuthService {
     });
 
     return {
-      message: 'Login successful',
+      user,
+      message: 'User Login Successfully...',
       accessToken,
       refreshToken,
     };
