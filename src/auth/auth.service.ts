@@ -16,7 +16,7 @@ export class AuthService {
   async register(email: string, password: string) {
 
     const existingUser = await this.usersService.findByEmail(email);
-
+    
     if (existingUser) {
       throw new BadRequestException('User already exists');
     }
@@ -29,8 +29,12 @@ export class AuthService {
     });
 
     return {
-      message: 'User Registered Successfully...',
-      user,
+      message: 'User registered successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
     };
   }
 
@@ -63,5 +67,30 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  //Refresh Token Api...
+  async refreshToken(token: string) {
+
+    //Token Is Verified Is This Token Is Valid Or Not...
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+      //console.log("Payload...",payload);
+      
+      //When Access Token IS Expired Then Create New Access Token...
+      const newAccessToken = this.jwtService.sign({
+        sub: payload.sub,
+        email: payload.email,
+      });
+
+      return {
+        accessToken: newAccessToken,
+      };
+
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
   }
 }
