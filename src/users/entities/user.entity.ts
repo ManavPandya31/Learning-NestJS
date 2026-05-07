@@ -16,6 +16,9 @@ export class User {
     @CreateDateColumn()
     createdAt : Date;
 
-@OneToMany(() => Project, (project) => project.createdBy)
-projects: Project[];
+    //Declare The Relationship With The Project Entity....
+    // One User Can Create Many Projects...
+    //User -> One , Projects -> Many , Thats Why One To Many Relationship...
+    @OneToMany(() => Project, (project) => project.createdBy)
+    projects: Project[];
 }
