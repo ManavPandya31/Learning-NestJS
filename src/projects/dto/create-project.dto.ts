@@ -17,6 +17,10 @@ export class CreateProjectDto {
   @IsNotEmpty()
   difficulty: string;
 
+  @IsString()
+  @IsOptional()
+  status?: string;
+
   @IsOptional()
   @IsString()
   githubLink?: string;
